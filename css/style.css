@@ -1,0 +1,47 @@
+/* Sử dụng font Be Vietnam Pro cho toàn bộ trang web */
+body { 
+    font-family: 'Be Vietnam Pro', sans-serif; 
+}
+
+/* Hiệu ứng cho thẻ sản phẩm */
+.product-card { 
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
+}
+.product-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); 
+}
+
+/* CSS cho modal (cửa sổ pop-up) */
+.modal { 
+    transition: opacity 0.3s ease; 
+}
+
+/* CSS để làm đẹp checkbox và radio button */
+.custom-checkbox:checked, .custom-radio:checked { 
+    background-color: #4f46e5; 
+    border-color: #4f46e5; 
+}
+.custom-checkbox:checked + label, .custom-radio:checked + label { 
+    color: #4f46e5; 
+}
+
+/* Tắt mũi tên tăng/giảm của trình duyệt cho input number */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+input[type='number'] { 
+    appearance: textfield;
+    -moz-appearance: textfield; 
+}
+
+/* Hiệu ứng cho các ô nhập liệu trong form */
+.form-input {
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.form-input:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+}

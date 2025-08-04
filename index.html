@@ -4,38 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bong Bóng Cá Store</title>
-    <!-- Tích hợp Tailwind CSS để làm đẹp giao diện -->
+
+    <!-- Tích hợp Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Tích hợp thư viện html2canvas để xuất ảnh -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Be Vietnam Pro', sans-serif; }
-        .product-card { transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
-        .modal { transition: opacity 0.3s ease; }
-        .custom-checkbox:checked, .custom-radio:checked { background-color: #4f46e5; border-color: #4f46e5; }
-        .custom-checkbox:checked + label, .custom-radio:checked + label { color: #4f46e5; }
-        input[type='number']::-webkit-inner-spin-button,
-        input[type='number']::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type='number'] { -moz-appearance: textfield; }
-        .form-input {
-            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-        .form-input:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
-        }
-    </style>
+    
+    <!-- Link đến tệp CSS tùy chỉnh -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-gray-100">
 
     <div class="container mx-auto px-4 py-8">
         <!-- Tiêu đề và khu vực giỏ hàng -->
         <header class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-800">Cửa Hàng Sản Phẩm</h1>
+            <h1 class="text-4xl font-bold text-gray-800">Bong Bóng Cá Store</h1>
             <p class="text-lg text-gray-600 mt-2">Khám phá các sản phẩm nổi bật của chúng tôi</p>
             <div class="mt-6 flex justify-center items-center gap-4">
                 <div id="cart-status" class="text-lg font-medium text-gray-700">Giỏ hàng: 0 sản phẩm</div>
@@ -108,7 +92,6 @@
                         </div>
                     </div>
                     
-                    <!-- Nút Xóa Bộ Lọc -->
                     <button id="clear-filters-btn" class="w-full text-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Xóa Bộ Lọc
                     </button>
@@ -117,12 +100,12 @@
 
             <!-- Lưới hiển thị các sản phẩm -->
             <main id="product-grid" class="lg:w-3/4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                <!-- Các thẻ sản phẩm sẽ được chèn vào đây bằng JavaScript -->
+                <!-- Sản phẩm sẽ được chèn vào đây bởi JavaScript -->
             </main>
         </div>
     </div>
 
-    <!-- CÁC MODAL (KHÔNG THAY ĐỔI) -->
+    <!-- Modal điền thông tin khách hàng -->
     <div id="customer-info-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 hidden z-50">
         <div class="bg-white rounded-lg shadow-2xl w-full max-w-lg">
             <div class="p-8">
@@ -153,6 +136,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal hiển thị tóm tắt đơn hàng -->
     <div id="order-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 hidden z-50">
         <div class="bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
             <div id="modal-content-to-export" class="p-8 overflow-y-auto bg-white">
@@ -173,227 +158,9 @@
         </div>
     </div>
 
-
-    <script>
-        // --- DỮ LIỆU SẢN PHẨM (BỔ SUNG THUỘC TÍNH 'type') ---
-        const products = [
-            { id: 1, name: "Sagami Original 0.01 (Hộp 5c)", category: "sagami", type: "sieu-mong", price: 599000, image: "product_pics/1.jpg", features: ["Hãng: Sagami", "Loại: Original", "Độ dày: 0.01 mm", "Quy cách: 5 chiếc"] },
-            { id: 2, name: "Sagami Original 0.02 (Hộp 2c)", category: "sagami", type: "sieu-mong", price: 79000, image: "product_pics/2.jpg", features: ["Hãng: Sagami", "Loại: Original", "Độ dày: 0.02 mm", "Quy cách: 2 chiếc"] },
-            { id: 3, name: "Sagami Original 0.02 (Hộp 6c)", category: "sagami", type: "sieu-mong", price: 249000, image: "product_pics/3.jpg", features: ["Hãng: Sagami", "Loại: Original", "Độ dày: 0.02 mm", "Quy cách: 6 chiếc"] },
-            { id: 4, name: "Sagami Original 0.02 (Hộp 12c)", category: "sagami", type: "sieu-mong", price: 449000, image: "product_pics/4.jpg", features: ["Hãng: Sagami", "Loại: Original", "Độ dày: 0.02 mm", "Quy cách: 12 chiếc"] },
-            { id: 5, name: "Play-Ah Last Long (Hộp 3c)", category: "play-ah", type: "keo-dai", price: 62000, image: "product_pics/5.jpg", features: ["Hãng: Play-Ah", "Loại: Last Long", "Độ dày: 0.04mm", "Quy cách: 3 chiếc"] },
-            { id: 6, name: "Play-Ah Siêu mỏng (Hộp 3c)", category: "play-ah", type: "sieu-mong", price: 54000, image: "product_pics/6.jpg", features: ["Hãng: Play-Ah", "Loại: Siêu mỏng", "Độ dày: 0.035mm", "Quy cách: 3 chiếc"] },
-            { id: 7, name: "Play-Ah Siêu mỏng (Hộp 10c)", category: "play-ah", type: "sieu-mong", price: 150000, image: "product_pics/7.jpg", features: ["Hãng: Play-Ah", "Loại: Siêu mỏng", "Độ dày: 0.035mm", "Quy cách: 10 chiếc"] },
-            { id: 8, name: "Play-Ah Có gai (Hộp 3c)", category: "play-ah", type: "gai", price: 54000, image: "product_pics/8.jpg", features: ["Hãng: Play-Ah", "Loại: Có gai", "Độ dày: N/A", "Quy cách: 3 chiếc"] },
-        ];
-
-        // --- KHỞI TẠO BIẾN VÀ TRẠNG THÁI ---
-        let cart = [];
-        let customerInfo = {};
-        const productGrid = document.getElementById('product-grid');
-        const cartStatus = document.getElementById('cart-status');
-        const checkoutButton = document.getElementById('checkout-button');
-        const filtersContainer = document.getElementById('filters');
-        const clearFiltersBtn = document.getElementById('clear-filters-btn');
-        
-        // --- KHAI BÁO CÁC MODAL ---
-        const customerInfoModal = document.getElementById('customer-info-modal');
-        const closeInfoModalButton = document.getElementById('close-info-modal-button');
-        const customerInfoForm = document.getElementById('customer-info-form');
-        const formError = document.getElementById('form-error');
-        const orderModal = document.getElementById('order-modal');
-        const closeOrderModalButton = document.getElementById('close-order-modal-button');
-        const exportImageButton = document.getElementById('export-image-button');
-
-        // --- CÁC HÀM XỬ LÝ ---
-
-        function formatCurrency(number) { return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(number); }
-        
-        /**
-         * Hàm hiển thị sản phẩm, có thể thêm thông báo nếu không có sản phẩm nào
-         */
-        function displayProducts(productList) {
-            productGrid.innerHTML = '';
-            if (productList.length === 0) {
-                productGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">Không tìm thấy sản phẩm nào phù hợp.</p>`;
-                return;
-            }
-            productList.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card flex flex-col bg-white rounded-lg shadow-md overflow-hidden';
-                productCard.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/ffffff?text=Image+Not+Found';">
-                    <div class="p-6 flex flex-col flex-grow">
-                        <h2 class="text-lg font-bold text-gray-800 mb-2">${product.name}</h2>
-                        <p class="text-xl font-semibold text-indigo-600 mb-4">${formatCurrency(product.price)}</p>
-                        <div class="mb-4 flex-grow">
-                            <ul class="list-disc list-inside text-gray-600 space-y-1 text-sm">
-                                ${product.features.map(feature => `<li>${feature}</li>`).join('')}
-                            </ul>
-                        </div>
-                        <div class="mt-auto flex items-center gap-3">
-                            <div class="flex items-center border border-gray-300 rounded-lg">
-                                <button data-product-id="${product.id}" class="quantity-btn quantity-minus font-bold w-8 h-8 text-xl text-gray-600 hover:bg-gray-100 rounded-l-lg transition-colors">-</button>
-                                <span id="quantity-${product.id}" class="quantity-display w-10 text-center font-semibold text-gray-800 bg-white">1</span>
-                                <button data-product-id="${product.id}" class="quantity-btn quantity-plus font-bold w-8 h-8 text-xl text-gray-600 hover:bg-gray-100 rounded-r-lg transition-colors">+</button>
-                            </div>
-                            <button data-id="${product.id}" class="add-to-cart-btn flex-grow bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-all duration-300">Thêm</button>
-                        </div>
-                    </div>
-                `;
-                productGrid.appendChild(productCard);
-            });
-        }
-
-        /**
-         * Hàm lọc sản phẩm chính, xử lý tất cả các tiêu chí
-         */
-        function applyFilters() {
-            // Lấy giá trị từ các bộ lọc
-            const selectedBrands = Array.from(document.querySelectorAll('#brand-filters input:checked')).map(cb => cb.value);
-            const selectedTypes = Array.from(document.querySelectorAll('#type-filters input:checked')).map(cb => cb.value);
-            const priceRangeValue = document.querySelector('#price-filters input:checked').value;
-
-            // Bắt đầu với tất cả sản phẩm và lọc dần
-            let filteredProducts = products.filter(product => {
-                // Lọc theo thương hiệu
-                const brandMatch = selectedBrands.length === 0 || selectedBrands.includes(product.category);
-
-                // Lọc theo loại sản phẩm
-                const typeMatch = selectedTypes.length === 0 || selectedTypes.includes(product.type);
-
-                // Lọc theo giá
-                let priceMatch = true; // Mặc định là true, chỉ lọc nếu không phải 'all'
-                if (priceRangeValue !== 'all') {
-                    const priceRange = priceRangeValue.split('-');
-                    const minPrice = parseInt(priceRange[0]);
-                    const maxPrice = priceRange[1] === 'Infinity' ? Infinity : parseInt(priceRange[1]);
-                    priceMatch = product.price >= minPrice && product.price <= maxPrice;
-                }
-
-                // Trả về true nếu sản phẩm khớp tất cả các điều kiện
-                return brandMatch && typeMatch && priceMatch;
-            });
-
-            displayProducts(filteredProducts);
-        }
-        
-        // --- LOGIC GIỎ HÀNG VÀ THANH TOÁN (KHÔNG THAY ĐỔI) ---
-        function addToCart(productId, quantity) {
-            const id = parseInt(productId);
-            const existingItem = cart.find(item => item.id === id);
-            if (existingItem) {
-                existingItem.quantity += quantity;
-            } else {
-                const productToAdd = products.find(p => p.id === id);
-                if (productToAdd) cart.push({ ...productToAdd, quantity: quantity });
-            }
-            updateCartStatus();
-        }
-        function updateCartStatus() {
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartStatus.textContent = `Giỏ hàng: ${totalItems} sản phẩm`;
-            checkoutButton.disabled = cart.length === 0;
-        }
-        function showOrderModal() {
-            if (cart.length === 0) return;
-            const summaryList = document.getElementById('order-summary-list');
-            const totalPriceEl = document.getElementById('order-total-price');
-            const customerDetailsSummary = document.getElementById('customer-details-summary');
-            let totalPrice = 0;
-            customerDetailsSummary.innerHTML = `
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Thông tin giao hàng</h3>
-                <p class="text-gray-700"><strong>Tên:</strong> ${customerInfo.name}</p>
-                <p class="text-gray-700"><strong>SĐT:</strong> ${customerInfo.phone}</p>
-                <p class="text-gray-700"><strong>Địa chỉ:</strong> ${customerInfo.address}</p>
-                ${customerInfo.deliveryTime ? `<p class="text-gray-700"><strong>Ghi chú:</strong> ${customerInfo.deliveryTime}</p>` : ''}
-            `;
-            summaryList.innerHTML = '';
-            cart.forEach(item => {
-                const itemTotalPrice = item.price * item.quantity;
-                summaryList.innerHTML += `
-                    <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <div>
-                            <span class="font-semibold text-gray-800">${item.name}</span>
-                            <span class="text-sm text-gray-500 ml-2">(x${item.quantity})</span>
-                        </div>
-                        <span class="font-semibold text-gray-800">${formatCurrency(itemTotalPrice)}</span>
-                    </div>
-                `;
-                totalPrice += itemTotalPrice;
-            });
-            totalPriceEl.textContent = formatCurrency(totalPrice);
-            orderModal.classList.remove('hidden');
-        }
-        function exportOrderAsImage() {
-            const modalContent = document.getElementById('modal-content-to-export');
-            html2canvas(modalContent, { scale: 2, backgroundColor: '#ffffff', useCORS: true }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `don_hang_${customerInfo.name.replace(/\s/g, '_')}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            });
-        }
-
-        // --- GẮN CÁC SỰ KIỆN ---
-        // Sự kiện cho các bộ lọc
-        filtersContainer.addEventListener('change', applyFilters);
-
-        // Sự kiện cho nút xóa bộ lọc
-        clearFiltersBtn.addEventListener('click', () => {
-            document.querySelectorAll('#filters input[type="checkbox"]').forEach(cb => cb.checked = false);
-            document.getElementById('price-all').checked = true;
-            applyFilters();
-        });
-        
-        // Sự kiện cho lưới sản phẩm (Thêm vào giỏ hàng, +/-)
-        productGrid.addEventListener('click', (e) => {
-            const target = e.target;
-            if (target.matches('.quantity-btn')) {
-                const productId = target.dataset.productId;
-                const quantityEl = document.getElementById(`quantity-${productId}`);
-                let quantity = parseInt(quantityEl.textContent);
-                if (target.matches('.quantity-plus')) quantity++;
-                else if (target.matches('.quantity-minus') && quantity > 1) quantity--;
-                quantityEl.textContent = quantity;
-            }
-            if (target.matches('.add-to-cart-btn')) {
-                const productId = target.dataset.id;
-                const quantityEl = document.getElementById(`quantity-${productId}`);
-                const quantity = parseInt(quantityEl.textContent);
-                addToCart(productId, quantity);
-                quantityEl.textContent = 1;
-                target.textContent = 'Đã thêm!';
-                target.classList.replace('bg-indigo-600', 'bg-green-500');
-                setTimeout(() => {
-                    target.textContent = 'Thêm';
-                    target.classList.replace('bg-green-500', 'bg-indigo-600');
-                }, 1500);
-            }
-        });
-
-        // Sự kiện cho các modal
-        checkoutButton.addEventListener('click', () => { if (cart.length > 0) customerInfoModal.classList.remove('hidden'); });
-        closeInfoModalButton.addEventListener('click', () => customerInfoModal.classList.add('hidden'));
-        customerInfoForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('customer-name').value.trim();
-            const phone = document.getElementById('customer-phone').value.trim();
-            const address = document.getElementById('customer-address').value.trim();
-            if (!name || !phone || !address) {
-                formError.classList.remove('hidden');
-                return;
-            }
-            formError.classList.add('hidden');
-            customerInfo = { name, phone, address, deliveryTime: document.getElementById('delivery-time').value.trim() };
-            customerInfoModal.classList.add('hidden');
-            showOrderModal();
-        });
-        closeOrderModalButton.addEventListener('click', () => orderModal.classList.add('hidden'));
-        exportImageButton.addEventListener('click', exportOrderAsImage);
-
-        // --- KHỞI CHẠY KHI TẢI TRANG ---
-        displayProducts(products);
-    </script>
+    <!-- Link đến các tệp JavaScript -->
+    <!-- QUAN TRỌNG: Tệp dữ liệu sản phẩm phải được tải trước tệp logic -->
+    <script src="js/products.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
